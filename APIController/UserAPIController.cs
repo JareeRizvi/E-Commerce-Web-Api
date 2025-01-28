@@ -61,11 +61,10 @@ namespace Ecommerce_Web_API.APIController
         [Route("Login")]
         public async Task<JsonResult<object>> Login(UserViewModel model)
         {
-            List<SP_Login_Result> result = new List<SP_Login_Result>(); 
             object resp;
             try
             {
-                var task = await Task.Run(() => result = new Models.User().Login(model));
+                var task = await Task.Run(() => model = new Models.User().Login(model));
                 if (model.IsSuccess) 
                 {
                     resp = new
@@ -89,7 +88,8 @@ namespace Ecommerce_Web_API.APIController
                 resp = new
                 {
                     Status = HttpStatusCode.InternalServerError,
-                    Message = ex.Message.ToString(),
+                    Message = "Internal Server Error!",
+                    Exception = ex.Message, 
                 };
             }
             return Json(resp);

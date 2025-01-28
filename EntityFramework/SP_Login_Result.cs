@@ -14,6 +14,7 @@ namespace Ecommerce_Web_API.EntityFramework
     public partial class SP_Login_Result
     {
         public int PK_UserId { get; set; }
+        public string FullName { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
         public string Phone_No { get; set; }

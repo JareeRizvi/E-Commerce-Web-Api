@@ -19,5 +19,6 @@ namespace Ecommerce_Web_API.ViewModel
         public int Postalcode { get; set; }
         public int CreatedBy { get; set; }
         public string PhoneNo { get; set; }
+        public string FullName { get; set; }
     }
 }

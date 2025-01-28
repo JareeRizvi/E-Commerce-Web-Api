@@ -35,24 +35,15 @@ namespace Ecommerce_Web_API.EntityFramework
         public virtual DbSet<Status> Status { get; set; }
         public virtual DbSet<User> Users { get; set; }
     
-        public virtual ObjectResult<SP_Login_Result> SP_Login(string uSERNAME, string pASSWORD)
-        {
-            var uSERNAMEParameter = uSERNAME != null ?
-                new ObjectParameter("USERNAME", uSERNAME) :
-                new ObjectParameter("USERNAME", typeof(string));
-    
-            var pASSWORDParameter = pASSWORD != null ?
-                new ObjectParameter("PASSWORD", pASSWORD) :
-                new ObjectParameter("PASSWORD", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_Login_Result>("SP_Login", uSERNAMEParameter, pASSWORDParameter);
-        }
-    
-        public virtual ObjectResult<string> SP_SignUp(string username, string email, string password, string address, Nullable<int> postalcode, string state, string city, Nullable<int> createdby, string phone_no)
+        public virtual ObjectResult<string> SP_SignUp(string username, string fullname, string email, string password, string address, Nullable<int> postalcode, string state, string city, string phone_no)
         {
             var usernameParameter = username != null ?
                 new ObjectParameter("username", username) :
                 new ObjectParameter("username", typeof(string));
+    
+            var fullnameParameter = fullname != null ?
+                new ObjectParameter("fullname", fullname) :
+                new ObjectParameter("fullname", typeof(string));
     
             var emailParameter = email != null ?
                 new ObjectParameter("email", email) :
@@ -78,15 +69,24 @@ namespace Ecommerce_Web_API.EntityFramework
                 new ObjectParameter("city", city) :
                 new ObjectParameter("city", typeof(string));
     
-            var createdbyParameter = createdby.HasValue ?
-                new ObjectParameter("createdby", createdby) :
-                new ObjectParameter("createdby", typeof(int));
-    
             var phone_noParameter = phone_no != null ?
                 new ObjectParameter("phone_no", phone_no) :
                 new ObjectParameter("phone_no", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("SP_SignUp", usernameParameter, emailParameter, passwordParameter, addressParameter, postalcodeParameter, stateParameter, cityParameter, createdbyParameter, phone_noParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("SP_SignUp", usernameParameter, fullnameParameter, emailParameter, passwordParameter, addressParameter, postalcodeParameter, stateParameter, cityParameter, phone_noParameter);
+        }
+    
+        public virtual ObjectResult<SP_Login_Result> SP_Login(string uSERNAME, string pASSWORD)
+        {
+            var uSERNAMEParameter = uSERNAME != null ?
+                new ObjectParameter("USERNAME", uSERNAME) :
+                new ObjectParameter("USERNAME", typeof(string));
+    
+            var pASSWORDParameter = pASSWORD != null ?
+                new ObjectParameter("PASSWORD", pASSWORD) :
+                new ObjectParameter("PASSWORD", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_Login_Result>("SP_Login", uSERNAMEParameter, pASSWORDParameter);
         }
     }
 }

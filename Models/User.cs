@@ -16,7 +16,7 @@ namespace Ecommerce_Web_API.Models
         {
 			try
 			{
-				model = db.SP_SignUp(model.UserName, model.Email, CommonUser.GetMd5Hash(model.Password,model.UserName), model.Address, model.Postalcode, model.State, model.City, model.CreatedBy, model.PhoneNo)
+				model = db.SP_SignUp(model.UserName,model.FullName, model.Email, CommonUser.GetMd5Hash(model.Password,model.UserName), model.Address, model.Postalcode, model.State, model.City,model.PhoneNo)
 					.Select(x => new UserViewModel
 				{
 					UserName = model.UserName,
@@ -28,7 +28,10 @@ namespace Ecommerce_Web_API.Models
 					City = model.City,
 					CreatedBy = model.CreatedBy
 				}).ToList().FirstOrDefault();
-					
+				if(model!= null)
+				{
+					model.IsSuccess = true;
+				}	
 					
 			}
 			catch (Exception ex)
@@ -41,26 +44,29 @@ namespace Ecommerce_Web_API.Models
         }
 
 
-		public List<SP_Login_Result> Login(UserViewModel model)
+		public UserViewModel Login(UserViewModel model)
 		{
-			List<SP_Login_Result> res = new List<SP_Login_Result>(); 
 			try
 			{
                 //model = db.SP_Login(model.UserName, CommonUser.GetMd5Hash(model.Password, model.UserName))
-                model = db.SP_Login(model.UserName, model.Password)
+                model = db.SP_Login(model.UserName, CommonUser.GetMd5Hash(model.Password, model.UserName))
 				.Select(x => new UserViewModel
 					{
-						UserName = model.UserName,
-						Email = model.Email,
-						Password = model.Password,
-						Address = model.Address,
-						Postalcode = model.Postalcode,
-						State = model.State,
-						City = model.City,
-						CreatedBy = model.CreatedBy
+						UserName = x.UserName,
+						FullName = x.FullName,
+						Email = x.Email,
+						Address = x.Address,
+						Postalcode = (int)x.Postalcode,
+						State = x.State,
+						City = x.City,
+						PhoneNo=x.Phone_No,
+						ResponseMessage=x.Message,
 
 					}).ToList().FirstOrDefault();
-				model.IsSuccess= true;
+				if (model != null)
+				{
+					model.IsSuccess = true;
+				}
 
 			}
 			catch (Exception ex) 
@@ -68,7 +74,7 @@ namespace Ecommerce_Web_API.Models
 				var message = ex.Message;
 				model.ResponseMessage = message;
 			}
-			return new List<SP_Login_Result>();
+			return model;
 		}
     }
 }
